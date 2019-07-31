@@ -28,9 +28,13 @@ public class MainMenuActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main_menu);
         sharedPreferences=getSharedPreferences("userLogInData", Activity.MODE_PRIVATE);
 
+
+
+
+
         String name=sharedPreferences.getString("name","null");
         String firstTime=sharedPreferences.getString("firstTime","null");
-
+        String mobileVerification=sharedPreferences.getString("mobileVerification","null");
 
 
 
@@ -39,14 +43,19 @@ public class MainMenuActivity extends AppCompatActivity {
                  startActivity(intent);
 
           }
-        else
+             else
+             if(mobileVerification.equals("null")){
+                 Intent intent1=new Intent(MainMenuActivity.this,MobileVerificationActivity.class);
+                 startActivity(intent1);
+             }
+           else
              if(name.equals("null")){
-                 Intent intent=new Intent(MainMenuActivity.this,LoginActivity.class);
-                 startActivity(intent);
+                 Intent intent2=new Intent(MainMenuActivity.this,LoginActivity.class);
+                 startActivity(intent2);
         }
 
         CardView greenLibraryCard=(CardView)findViewById(R.id.greenLibraryCard);
-       CardView notesCard=(CardView)findViewById(R.id.notesCard);
+        CardView notesCard=(CardView)findViewById(R.id.notesCard);
         greenLibraryCard.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -99,6 +108,12 @@ public class MainMenuActivity extends AppCompatActivity {
                 Intent launchBrowser = new Intent(Intent.ACTION_VIEW, uriUrl);
                 startActivity(launchBrowser);
                 return true;
+
+            case R.id.RateUs:Uri marketUri = Uri.parse("market://details?id=" + "com.thedevlopershome.intranetnitrr");
+                Intent marketIntent = new Intent(Intent.ACTION_VIEW, marketUri);
+                startActivity(marketIntent);
+                return  true;
+
             case R.id.feedback:
                 String s="Debug-infos:";
                 s += "\n OS Version: " + System.getProperty("os.version") + "(" + android.os.Build.VERSION.INCREMENTAL + ")";
@@ -137,10 +152,16 @@ public class MainMenuActivity extends AppCompatActivity {
         super.onResume();
         String name=sharedPreferences.getString("name","null");
         String firstTime=sharedPreferences.getString("firstTime","null");
+        String mobileVerification=sharedPreferences.getString("mobileVerification","null");
+
         if(firstTime.equals("null")){
             Intent intent=new Intent(MainMenuActivity.this,FirstTimeActivity.class);
             startActivity(intent);
 
+        }  else
+        if(mobileVerification.equals("null")){
+            Intent intent1=new Intent(MainMenuActivity.this,MobileVerificationActivity.class);
+            startActivity(intent1);
         }
         else
         if(name.equals("null")){

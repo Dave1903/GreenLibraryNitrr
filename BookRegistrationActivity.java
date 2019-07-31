@@ -35,6 +35,7 @@ public class BookRegistrationActivity extends AppCompatActivity {
     EditText nameText,contactText,rollNo;
     TextView requestButton;
     SharedPreferences sharedPreferences;
+    String oneTimeRegistration;
     private String subject;
     private String writer;
 
@@ -58,6 +59,8 @@ public class BookRegistrationActivity extends AppCompatActivity {
         }
 
 
+
+
         branchSpinner=(Spinner)findViewById(R.id.branchSpiner1);
         semSpinner=(Spinner)findViewById(R.id.semSpiner1);
         nameText=(EditText)findViewById(R.id.nameText);
@@ -67,7 +70,31 @@ public class BookRegistrationActivity extends AppCompatActivity {
 
         sharedPreferences=getSharedPreferences("userLogInData", Activity.MODE_PRIVATE);
         String name=sharedPreferences.getString("name","null");
+        String mobileNo=sharedPreferences.getString("userphoneno","0000000000");
+        oneTimeRegistration=sharedPreferences.getString("oneTimeRegistration","null");
+
+
+        if(oneTimeRegistration.equals("true")){
+            new SweetAlertDialog(BookRegistrationActivity.this, SweetAlertDialog.WARNING_TYPE)
+                    .setTitleText("Already Registered")
+                    .setContentText("you have Already registered for one book")
+                    .setConfirmText("okay")
+                    .setConfirmClickListener(new SweetAlertDialog.OnSweetClickListener() {
+                        @Override
+                        public void onClick(SweetAlertDialog sDialog) {
+                            sDialog.dismissWithAnimation();
+                            Intent intent = new Intent(BookRegistrationActivity.this, MainMenuActivity.class);
+                            startActivity(intent);
+
+                        }
+                    })
+                    .show();
+        }
+
+
         nameText.setText(name );
+        contactText.setText(mobileNo);
+        contactText.setEnabled(false);
 
         String[] setSem={"1","2","3","4","5","6","7","8"};
         ArrayAdapter<String> semAdapter=new ArrayAdapter<String>(BookRegistrationActivity.this,R.layout.support_simple_spinner_dropdown_item,setSem);
@@ -173,7 +200,7 @@ public class BookRegistrationActivity extends AppCompatActivity {
                 new SweetAlertDialog(BookRegistrationActivity.this, SweetAlertDialog.SUCCESS_TYPE)
                         .setTitleText("Thank YOU")
                         .setContentText("Your request has been successfully added,we will contact you if you are eligible after data processing" +
-                                ".(In case of multiple requests first one will be considered)")
+                                ".")
                         .setConfirmText("CONTINUE")
                         .setConfirmClickListener(new SweetAlertDialog.OnSweetClickListener() {
                             @Override
@@ -181,6 +208,9 @@ public class BookRegistrationActivity extends AppCompatActivity {
 
 
                                 sDialog.dismissWithAnimation();
+                                SharedPreferences.Editor editor=sharedPreferences.edit();
+                                editor.putString("oneTimeRegistration","true");
+                                editor.apply();
                                 Intent intent=new Intent(BookRegistrationActivity.this,GreenLibraryActivity.class);
                                 startActivity(intent);
 

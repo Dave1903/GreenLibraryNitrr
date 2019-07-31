@@ -52,6 +52,7 @@ public class GreenLibraryActivity extends AppCompatActivity {
     SharedPreferences sharedPreferences;
    private GreenLibraryData greendata;
     private TextView emptylibrary;
+    String oneTimeRegistration;
 
 
 
@@ -67,6 +68,7 @@ public class GreenLibraryActivity extends AppCompatActivity {
 
         sharedPreferences=getSharedPreferences("userLogInData",Activity.MODE_PRIVATE);
         final String useRname=sharedPreferences.getString("name","null");
+        oneTimeRegistration=sharedPreferences.getString("oneTimeRegistration","null");
 
 
         emptylibrary=(TextView)findViewById(R.id.emptylibrary);
@@ -97,11 +99,13 @@ public class GreenLibraryActivity extends AppCompatActivity {
         });
 
 
+
         greenBooksList.setOnChildClickListener(new ExpandableListView.OnChildClickListener() {
             @Override
             public boolean onChildClick(ExpandableListView expandableListView, View view, int i, int i1, long l) {
                 final String subject= listDataHeader1.get(i);
                 final String[] writer = listDataChild1.get(listDataHeader1.get(i)).get(i1).split("-");
+                oneTimeRegistration=sharedPreferences.getString("oneTimeRegistration","null");
 
                 if(useRname.equals("guest")){
 
@@ -122,7 +126,26 @@ public class GreenLibraryActivity extends AppCompatActivity {
 
 
                 }
-                else {
+                else
+                    if(oneTimeRegistration.equals("true"))
+                    {
+                    new SweetAlertDialog(GreenLibraryActivity.this, SweetAlertDialog.WARNING_TYPE)
+                            .setTitleText("Already Registered")
+                            .setContentText("you have Already registered for one book")
+                            .setConfirmText("okay")
+                            .setConfirmClickListener(new SweetAlertDialog.OnSweetClickListener() {
+                                @Override
+                                public void onClick(SweetAlertDialog sDialog) {
+                                    sDialog.dismissWithAnimation();
+                                    Intent intent = new Intent(GreenLibraryActivity.this, MainMenuActivity.class);
+                                    startActivity(intent);
+
+                                }
+                            })
+                            .show();
+                }
+                else
+                    {
                     new SweetAlertDialog(GreenLibraryActivity.this, SweetAlertDialog.WARNING_TYPE)
                             .setTitleText("register for book")
                             .setContentText("Do you want to register for " + writer[0] + ",subject " + subject + " ??")

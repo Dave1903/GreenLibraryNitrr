@@ -48,6 +48,7 @@ public class LoginActivity extends AppCompatActivity {
     private GoogleSignInOptions gso;
     private final int RC_SIGN_IN=301;
 
+
     SharedPreferences sharedPreferences;
     TextView guestButton;
     @Override
@@ -139,6 +140,38 @@ public class LoginActivity extends AppCompatActivity {
                 Toast.makeText(LoginActivity.this,"error login unsuccessfull",Toast.LENGTH_SHORT).show();
             }
         });
+
+
+       guestButton.setOnClickListener(new View.OnClickListener() {
+           @Override
+           public void onClick(View view) {
+
+               new SweetAlertDialog(LoginActivity.this, SweetAlertDialog.WARNING_TYPE)
+                       .setTitleText("WARNING")
+                       .setContentText("ALL FEATURES WILL NOT WORK IN THIS MODE")
+                       .setConfirmText("CONTINUE")
+                       .setConfirmClickListener(new SweetAlertDialog.OnSweetClickListener() {
+                           @Override
+                           public void onClick(SweetAlertDialog sDialog) {
+
+                               SharedPreferences.Editor editor=sharedPreferences.edit();
+                               editor.putString("name","guest");
+                               editor.apply();
+
+                               sDialog.dismissWithAnimation();
+                               Intent intent=new Intent(LoginActivity.this,MainMenuActivity.class);
+                               startActivity(intent);
+
+
+
+                           }
+                       })
+                       .show();
+
+           }
+       });
+
+
     }
 
     @Override
@@ -162,32 +195,7 @@ public class LoginActivity extends AppCompatActivity {
     }
 
 
-    public void guestButtonClick(View view){
 
-        new SweetAlertDialog(LoginActivity.this, SweetAlertDialog.WARNING_TYPE)
-                .setTitleText("WARNING")
-                .setContentText("ALL FEATURES WILL NOT WORK IN THIS MODE")
-                .setConfirmText("CONTINUE")
-                .setConfirmClickListener(new SweetAlertDialog.OnSweetClickListener() {
-                    @Override
-                    public void onClick(SweetAlertDialog sDialog) {
-
-                        SharedPreferences.Editor editor=sharedPreferences.edit();
-                        editor.putString("name","guest");
-                        editor.apply();
-
-                        sDialog.dismissWithAnimation();
-                   Intent intent=new Intent(LoginActivity.this,MainMenuActivity.class);
-                        startActivity(intent);
-
-
-
-                    }
-                })
-                .show();
-
-
-    }
 
 
     private boolean isNetworkAvailable() {

@@ -97,7 +97,7 @@ public class NotesActivity extends AppCompatActivity {
         downloadButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-            startActivity(new Intent(DownloadManager.ACTION_VIEW_DOWNLOADS));
+           startActivity(new Intent(DownloadManager.ACTION_VIEW_DOWNLOADS));
 
 
             }
